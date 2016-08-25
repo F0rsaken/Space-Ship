@@ -28,8 +28,8 @@ var explosionSound;
 var isPlaying = false;
 var intro;
 var isAgain = false;
-var isReady;
 var readyButton;
+var i = 1;
 
 WebFontConfig = {
 	active: function() { 
@@ -75,7 +75,10 @@ var mainState = {
 		cursors = this.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 		restartButton = this.input.keyboard.addKey(Phaser.Keyboard.R);
-		timer = game.time.events.loop(1000, this.addComets.bind(this));
+		readyButton = this.input.keyboard.addKey(Phaser.Keyboard.S);
+		if(isAgain == true){
+			timer = game.time.events.loop(1000, this.addComets.bind(this));
+		}
 		comets = game.add.group();
 		score = 0;
 		scoreLabel = game.add.text(30, 30, 'Score: 0', {
@@ -88,12 +91,12 @@ var mainState = {
 			fontSize: 22, fill: '#000000', stroke: '#ffffff', strokeThickness: 5
 		});
 		if(isAgain ==false){
-			intro = game.add.text(game.world.centerX, game.world.centerY, 'Shoot down the comets!\nShooting - spacebar!\nMoving - left/right arrow!\nGood Luck!', {
+			intro = game.add.text(game.world.centerX, game.world.centerY, 'Shoot down the comets!\nShooting - spacebar!\nMoving - left/right arrow!\nTo start press\'S\'!\nGood Luck!', {
 				fontSize: 20, fill: '#000000', stroke: '#ffffff', strokeThickness: 5, 
 			});
 			intro.anchor.set(0.5);
-			intro.lifespan = 2000;
 			isAgain = true;
+
 		}
 		this.updateText();
 		music = game.add.audio('music');
@@ -117,6 +120,7 @@ var mainState = {
 	},
 
 	update: function(){
+		readyButton.onDown.addOnce(this.playerStart, this);
 		starfield.tilePosition.y += 2;
 		ship.body.velocity.x = 0;
 		if(ship.alive == true){
@@ -160,6 +164,11 @@ var mainState = {
 		game.physics.arcade.overlap(weapon.bullets,comets, this.hitBullet, null, this);
 	},
 
+	playerStart: function() {
+		intro.kill();
+		timer = game.time.events.loop(1000, this.addComets.bind(this));
+	},
+
 	raise: function() {
 		speedLeft -=25;
 		speedRight +=25;
@@ -184,7 +193,7 @@ var mainState = {
 	},
 
 	restartGame: function(){
-		isReady = true;
+		i = 0;
 		game.state.start('main');
 	},
 
