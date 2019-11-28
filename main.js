@@ -137,17 +137,17 @@ var mainState = {
 			return;
 		}
 
-		if(score==10 || score==20 || score==30 || score==40 || score==50 || score==60 || score==70 || score==80 || score==90 || score==100 || score==120 || score==140 || score==160 || score==180 || score==200){
+		if (score % 10 === 0){
 			this.raise();
-			if(score==20 || score==40 || score==60 || score==80 || score==100 || score==120 || score==140 || score==160 || score==180 || score==200){
-				lifes+=1;
+			if (score % 20 === 0) {
+				lifes++;
 				extraLife = game.add.text(85, 380, 'Extra Life!', {
 					fontSize: 45, font: 'Revalia', fill: '#000000', stroke: '#ffffff', strokeThickness: 5
 				});
 				currentLifes.text = 'Lifes: ' + lifes;
 				extraLife.lifespan = 1200;
 			}
-			++score;
+			score++;
 			scoreLabel.text = 'Score: ' + score;
 			nextStage = game.add.text(85, 200 , 'Speed Up!\nExtra point',{
 				fontSize: 45, font: 'Revalia', fill: '#000000', stroke: '#ffffff', strokeThickness: 5
@@ -170,10 +170,10 @@ var mainState = {
 	},
 
 	raise: function() {
-		speedLeft -=25;
-		speedRight +=25;
-		cometSpeed +=35;
-		if(weapon.fireRate>250) {
+		speedLeft -= 25;
+		speedRight += 25;
+		cometSpeed += 65;
+		if(weapon.fireRate > 30) {
 			weapon.fireRate -= 25;
 		}
 	},
